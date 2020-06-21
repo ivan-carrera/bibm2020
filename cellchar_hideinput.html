@@ -13094,59 +13094,11 @@ First of all, we have to identify the cellular lines. File contains a list of ce
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[1]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cellosaurus_file</span> <span class="o">=</span> <span class="s1">&#39;data/cellosaurus/cellosaurus.xml&#39;</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Cellosaurus file:&#39;</span><span class="p">,</span> <span class="n">cellosaurus_file</span><span class="p">)</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">cellosaurus_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_</span><span class="p">:</span>
-    <span class="n">lines</span> <span class="o">=</span> <span class="n">file_</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">107</span><span class="p">,</span><span class="mi">135</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">))</span>
-
-<span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="k">as</span> <span class="nn">ET</span>
-<span class="n">tree</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">cellosaurus_file</span><span class="p">)</span>
-<span class="n">root</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">getroot</span><span class="p">()</span>
-
-<span class="n">cell_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">cell_line</span> <span class="ow">in</span> <span class="n">root</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;cell-line-list&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s1">&#39;cell-line&#39;</span><span class="p">):</span>
-    <span class="n">accession</span> <span class="o">=</span> <span class="n">cell_line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;accession-list&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;accession&#39;</span><span class="p">)</span>
-    <span class="n">name_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">cell_line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;name-list&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">):</span>
-        <span class="n">name_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
-    <span class="n">species_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">species</span> <span class="ow">in</span> <span class="n">cell_line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;species-list&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s1">&#39;cv-term&#39;</span><span class="p">):</span>
-        <span class="n">species_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">species</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s1">&#39;accession&#39;</span><span class="p">])</span>
-    <span class="n">reference_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">reference</span> <span class="ow">in</span> <span class="n">cell_line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;reference-list&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s1">&#39;reference&#39;</span><span class="p">):</span>
-            <span class="k">if</span> <span class="s1">&#39;PubMed&#39;</span> <span class="ow">in</span> <span class="n">reference</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s1">&#39;resource-internal-ref&#39;</span><span class="p">]:</span>
-                <span class="n">reference_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reference</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s1">&#39;resource-internal-ref&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;PubMed=&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">))</span>
-    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
-        <span class="k">pass</span>
-    <span class="n">cell_dict</span><span class="p">[</span><span class="n">accession</span><span class="o">.</span><span class="n">text</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;accession&#39;</span><span class="p">:</span> <span class="n">accession</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s1">&#39;cell_name&#39;</span><span class="p">:</span> <span class="n">name_list</span><span class="p">,</span> <span class="s1">&#39;species&#39;</span><span class="p">:</span> <span class="n">species_list</span><span class="p">,</span>
-                      <span class="s1">&#39;reference&#39;</span><span class="p">:</span> <span class="n">reference_list</span><span class="p">}</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Cell line examples:&#39;</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">cell_</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">cell_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())[:</span><span class="mi">2</span><span class="p">]:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">cell_</span><span class="p">,</span> <span class="n">cell_dict</span><span class="p">[</span><span class="n">cell_</span><span class="p">])</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Cellosaurus contains information about&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">cell_dict</span><span class="p">),</span> <span class="s1">&#39;cellular lines&#39;</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
 
 <div class="output_wrapper">
 <div class="output">
 
-
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Cellosaurus file: data/cellosaurus/cellosaurus.xml
@@ -13203,35 +13155,11 @@ This will be our <em>Ground Truth</em>.</p>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">get_cells_with_min_gtruth_refs</span><span class="p">(</span><span class="n">reference_min</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-    <span class="n">gtruth_idx</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">cell_dict</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cell_dict</span><span class="p">[</span><span class="n">cell</span><span class="p">][</span><span class="s1">&#39;reference&#39;</span><span class="p">])</span> <span class="o">&gt;=</span> <span class="n">reference_min</span><span class="p">:</span>
-            <span class="n">gtruth_idx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">gtruth_idx</span>
-
-<span class="n">gtruth_idx</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">):</span>
-    <span class="n">gtruth_idx</span> <span class="o">=</span> <span class="n">get_cells_with_min_gtruth_refs</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">gtruth_idx</span><span class="p">),</span><span class="s1">&#39;cell lines with&#39;</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="s1">&#39;or more references&#39;</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
 
 <div class="output_wrapper">
 <div class="output">
 
-
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>118785 cell lines with 0 or more references
@@ -13272,28 +13200,11 @@ First, we transform the list of names for a cellular line into a query for the P
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">parse</span>
-<span class="k">for</span> <span class="n">cell_</span> <span class="ow">in</span> <span class="n">gtruth_idx</span><span class="p">[:</span><span class="mi">4</span><span class="p">]:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">cell_</span><span class="p">,</span> <span class="n">cell_dict</span><span class="p">[</span><span class="n">cell_</span><span class="p">][</span><span class="s1">&#39;cell_name&#39;</span><span class="p">])</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">parse</span><span class="o">.</span><span class="n">list_toquery</span><span class="p">(</span><span class="n">cell_dict</span><span class="p">[</span><span class="n">cell_</span><span class="p">][</span><span class="s1">&#39;cell_name&#39;</span><span class="p">]))</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
 
 <div class="output_wrapper">
 <div class="output">
 
-
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>CVCL_7935 [&#39;253J&#39;, &#39;253j&#39;, &#39;253-J&#39;, &#39;253 J&#39;, &#39;253J-P&#39;, &#39;253J-Parental&#39;, &#39;253J P&#39;, &#39;253JP&#39;]
@@ -13322,50 +13233,11 @@ because they can cause that search queries return false results.</p>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">remove_numeric_names</span><span class="p">(</span><span class="n">namelist</span><span class="p">):</span>
-    <span class="n">newlist</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">namelist</span><span class="p">:</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">str</span><span class="p">(</span><span class="n">parse</span><span class="o">.</span><span class="n">replace_spchars</span><span class="p">(</span><span class="n">name</span><span class="p">))</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">isnumeric</span><span class="p">():</span>
-            <span class="n">newlist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">newlist</span>
-
-<span class="n">list_to_pop</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">cell_</span> <span class="ow">in</span> <span class="n">cell_dict</span><span class="p">:</span>
-    <span class="n">newlist</span> <span class="o">=</span> <span class="n">remove_numeric_names</span><span class="p">(</span><span class="n">cell_dict</span><span class="p">[</span><span class="n">cell_</span><span class="p">][</span><span class="s1">&#39;cell_name&#39;</span><span class="p">])</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">newlist</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">list_to_pop</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cell_</span><span class="p">)</span>
-    <span class="n">cell_dict</span><span class="p">[</span><span class="n">cell_</span><span class="p">][</span><span class="s1">&#39;cell_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">newlist</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;There are&#39;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">list_to_pop</span><span class="p">),</span> <span class="s1">&#39;cell lines with only numeric names.&#39;</span><span class="p">)</span>
-
-<span class="k">for</span> <span class="n">cell_</span> <span class="ow">in</span> <span class="n">list_to_pop</span><span class="p">:</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">cell_dict</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">cell_</span><span class="p">)</span>
-    <span class="k">except</span><span class="p">:</span>
-        <span class="k">pass</span>
-
-<span class="n">gtruth_idx</span> <span class="o">=</span> <span class="n">get_cells_with_min_gtruth_refs</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;We are left with&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">cell_dict</span><span class="p">),</span> <span class="s1">&#39;cell lines.&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">gtruth_idx</span><span class="p">),</span><span class="s1">&#39;cell lines with&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;or more references&#39;</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
 
 <div class="output_wrapper">
 <div class="output">
 
-
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>There are 425 cell lines with only numeric names.
@@ -13390,27 +13262,11 @@ First, we transform the list of names for a cellular line into a query for the P
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">cell_</span> <span class="ow">in</span> <span class="n">gtruth_idx</span><span class="p">[:</span><span class="mi">4</span><span class="p">]:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">cell_</span><span class="p">,</span> <span class="n">cell_dict</span><span class="p">[</span><span class="n">cell_</span><span class="p">][</span><span class="s1">&#39;cell_name&#39;</span><span class="p">])</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">parse</span><span class="o">.</span><span class="n">list_toquery</span><span class="p">(</span><span class="n">cell_dict</span><span class="p">[</span><span class="n">cell_</span><span class="p">][</span><span class="s1">&#39;cell_name&#39;</span><span class="p">]))</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
 
 <div class="output_wrapper">
 <div class="output">
 
-
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>CVCL_IW91 [&#39;#40a&#39;]
@@ -13438,35 +13294,11 @@ CVCL_IP58 [&#39;0308-GSC&#39;, &#39;GSC-0308&#39;]
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">cell_</span> <span class="ow">in</span> <span class="n">gtruth_idx</span><span class="p">[:</span><span class="mi">10</span><span class="p">]:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="o">*</span><span class="mi">80</span><span class="p">)</span>
-    <span class="n">list_</span> <span class="o">=</span> <span class="n">cell_dict</span><span class="p">[</span><span class="n">cell_</span><span class="p">][</span><span class="s1">&#39;cell_name&#39;</span><span class="p">]</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">cell_</span><span class="p">,</span> <span class="n">list_</span><span class="p">)</span>
-    <span class="n">query</span> <span class="o">=</span> <span class="n">parse</span><span class="o">.</span><span class="n">list_toquery</span><span class="p">(</span><span class="n">list_</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
-    <span class="n">idlist</span> <span class="o">=</span> <span class="n">parse</span><span class="o">.</span><span class="n">search_idlist</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">cell_</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">idlist</span><span class="p">),</span> <span class="s1">&#39;references in PubMed&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">cell_</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">cell_dict</span><span class="p">[</span><span class="n">cell_</span><span class="p">][</span><span class="s1">&#39;reference&#39;</span><span class="p">]),</span> <span class="s1">&#39;references in Ground Truth&#39;</span><span class="p">)</span>
-    <span class="n">comm_ref</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">cell_dict</span><span class="p">[</span><span class="n">cell_</span><span class="p">][</span><span class="s1">&#39;reference&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">idlist</span><span class="p">)))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">cell_</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">comm_ref</span><span class="p">),</span> <span class="s1">&#39;references in Ground Truth are in PubMed&#39;</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
 
 <div class="output_wrapper">
 <div class="output">
 
-
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>________________________________________________________________________________
@@ -13547,31 +13379,11 @@ We will retrieve abstracts in two directories: one for Ground Truth, and other f
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[7]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">cell_</span> <span class="ow">in</span> <span class="n">gtruth_idx</span><span class="p">[:</span><span class="mi">10</span><span class="p">]:</span>
-    <span class="n">parse</span><span class="o">.</span><span class="n">process_gt_pm</span><span class="p">(</span><span class="n">cell_dict</span><span class="p">[</span><span class="n">cell_</span><span class="p">])</span>
-
-<span class="c1"># This code should be uncommmented if you wish to retrieve all abstracts</span>
-<span class="c1"># import multiprocessing</span>
-<span class="c1"># pool = multiprocessing.Pool(processes=8)</span>
-<span class="c1"># pool.map(func=parse.process_gt_pm, iterable=cell_dict)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
 
 <div class="output_wrapper">
 <div class="output">
 
-
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>CVCL_IW91 gt file already exists
@@ -13612,55 +13424,11 @@ However, for compatibility and standard processing, we should parse json files i
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-
-<span class="n">gtruth_dir</span> <span class="o">=</span> <span class="s1">&#39;data/cell_json_gt/&#39;</span>
-<span class="n">gtruth_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="s1">&#39;document&#39;</span><span class="p">,</span> <span class="s1">&#39;cell_id&#39;</span><span class="p">])</span>
-<span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="k">for</span> <span class="n">cell_</span> <span class="ow">in</span> <span class="n">gtruth_idx</span><span class="p">:</span>
-    <span class="n">gtruth_file</span> <span class="o">=</span> <span class="n">gtruth_dir</span> <span class="o">+</span> <span class="n">cell_</span> <span class="o">+</span> <span class="s1">&#39;.json&#39;</span>
-    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">gtruth_file</span><span class="p">):</span>
-        <span class="n">cell_gtruth_</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fp</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">gtruth_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">))</span>
-        <span class="n">docs</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">cell_gtruth_</span><span class="p">[</span><span class="s1">&#39;documents&#39;</span><span class="p">])</span>
-        <span class="n">gtruth_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">gtruth_df</span><span class="p">,</span> <span class="n">docs</span><span class="p">])</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="s1">&#39;files in&#39;</span><span class="p">,</span> <span class="n">gtruth_dir</span><span class="p">)</span>
-<span class="n">gtruth_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">path_or_buf</span><span class="o">=</span><span class="s1">&#39;data/gt_df.csv&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="n">pm_dir</span> <span class="o">=</span> <span class="s1">&#39;data/cell_json_pm/&#39;</span>
-<span class="n">pm_filelist</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">pm_dir</span><span class="p">)</span>
-
-<span class="n">reference_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="s1">&#39;document&#39;</span><span class="p">,</span> <span class="s1">&#39;cell_id&#39;</span><span class="p">])</span>
-<span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="k">for</span> <span class="n">reference_file</span> <span class="ow">in</span> <span class="n">pm_filelist</span><span class="p">:</span>
-    <span class="n">cell_reference_</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fp</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">pm_dir</span> <span class="o">+</span> <span class="n">reference_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">))</span>
-    <span class="n">docs</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">cell_reference_</span><span class="p">[</span><span class="s1">&#39;documents&#39;</span><span class="p">])</span>
-    <span class="n">reference_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">reference_df</span><span class="p">,</span> <span class="n">docs</span><span class="p">])</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="s1">&#39;files in&#39;</span><span class="p">,</span> <span class="n">pm_dir</span><span class="p">)</span>
-<span class="n">reference_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">path_or_buf</span><span class="o">=</span><span class="s1">&#39;data/pm_df.csv&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
 
 <div class="output_wrapper">
 <div class="output">
 
-
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>52945 files in data/cell_json_gt/
@@ -13682,38 +13450,11 @@ However, for compatibility and standard processing, we should parse json files i
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[1]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-
-<span class="n">gtruth_file</span> <span class="o">=</span> <span class="s1">&#39;data/gt_df.csv&#39;</span>
-<span class="n">reference_file</span> <span class="o">=</span> <span class="s1">&#39;data/pm_df.csv&#39;</span>
-
-<span class="n">gtruth_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">gtruth_file</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="n">error_bad_lines</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;latin-1&quot;</span><span class="p">,</span>
-                         <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">reference_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">reference_file</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="n">error_bad_lines</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;latin-1&quot;</span><span class="p">,</span>
-                         <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;GTruth Document table has information on&#39;</span><span class="p">,</span> <span class="n">gtruth_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;documents of&#39;</span><span class="p">,</span>
-      <span class="n">gtruth_df</span><span class="p">[</span><span class="s1">&#39;cell_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;cell lines&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Reference Document table has information on&#39;</span><span class="p">,</span> <span class="n">reference_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;documents of&#39;</span><span class="p">,</span>
-      <span class="n">reference_df</span><span class="p">[</span><span class="s1">&#39;cell_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;cell lines&#39;</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
 
 <div class="output_wrapper">
 <div class="output">
 
-
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>GTruth Document table has information on 97433 documents of 52945 cell lines
@@ -13736,46 +13477,11 @@ First, we remove all references and ground truth that is not common.</p>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">gt_count</span> <span class="o">=</span> <span class="n">gtruth_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;cell_id&#39;</span><span class="p">])[</span><span class="s1">&#39;cell_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
-<span class="n">gtruth_df</span> <span class="o">=</span> <span class="n">gtruth_df</span><span class="p">[</span><span class="n">gtruth_df</span><span class="o">.</span><span class="n">cell_id</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">gt_count</span><span class="p">[</span><span class="n">gt_count</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">)]</span>
-<span class="n">pm_count</span> <span class="o">=</span> <span class="n">reference_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;cell_id&#39;</span><span class="p">])[</span><span class="s1">&#39;cell_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
-<span class="n">reference_df</span> <span class="o">=</span> <span class="n">reference_df</span><span class="p">[</span><span class="n">reference_df</span><span class="o">.</span><span class="n">cell_id</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">pm_count</span><span class="p">[</span><span class="n">pm_count</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">)]</span>
-
-<span class="n">gtruth_cells</span> <span class="o">=</span> <span class="n">gtruth_df</span><span class="p">[</span><span class="s1">&#39;cell_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
-<span class="n">reference_cells</span> <span class="o">=</span> <span class="n">reference_df</span><span class="p">[</span><span class="s1">&#39;cell_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
-<span class="n">cell_intersection</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">gtruth_cells</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">reference_cells</span><span class="p">))</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Datasets have&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">cell_intersection</span><span class="p">),</span> <span class="s1">&#39;common cell lines&#39;</span><span class="p">)</span>
-
-<span class="n">gtruth_df</span> <span class="o">=</span> <span class="n">gtruth_df</span><span class="p">[</span><span class="n">gtruth_df</span><span class="o">.</span><span class="n">cell_id</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">cell_intersection</span><span class="p">)]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">reference_df</span> <span class="o">=</span> <span class="n">reference_df</span><span class="p">[</span><span class="n">reference_df</span><span class="o">.</span><span class="n">cell_id</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">cell_intersection</span><span class="p">)]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;GTruth Document table has information on&#39;</span><span class="p">,</span> <span class="n">gtruth_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;documents of&#39;</span><span class="p">,</span>
-      <span class="n">gtruth_df</span><span class="p">[</span><span class="s1">&#39;cell_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;cell lines&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Reference Document table has information on&#39;</span><span class="p">,</span> <span class="n">reference_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;documents of&#39;</span><span class="p">,</span>
-      <span class="n">reference_df</span><span class="p">[</span><span class="s1">&#39;cell_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;cell lines&#39;</span><span class="p">)</span>
-
-<span class="n">reference_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">reference_df</span><span class="p">,</span> <span class="n">gtruth_df</span><span class="p">])</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">pm_count</span> <span class="o">=</span> <span class="n">reference_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;cell_id&#39;</span><span class="p">])[</span><span class="s1">&#39;cell_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Every cell line has at least&#39;</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">pm_count</span><span class="p">),</span> <span class="s1">&#39;documents&#39;</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
 
 <div class="output_wrapper">
 <div class="output">
 
-
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Datasets have 952 common cell lines
@@ -13800,74 +13506,11 @@ Every cell line has at least 6 documents
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">SVC</span>
-<span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">LinearSVC</span>
-<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">GridSearchCV</span>
-<span class="kn">from</span> <span class="nn">nltk.stem.porter</span> <span class="kn">import</span> <span class="n">PorterStemmer</span>
-<span class="kn">from</span> <span class="nn">sklearn.feature_selection</span> <span class="kn">import</span> <span class="n">SelectFromModel</span>
-<span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="kn">import</span> <span class="n">TfidfVectorizer</span>
-
-<span class="k">def</span> <span class="nf">crossval</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">min_references</span><span class="p">,</span> <span class="n">stemmed</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="n">pm_count</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;cell_id&#39;</span><span class="p">])[</span><span class="s1">&#39;cell_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">cell_id</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">pm_count</span><span class="p">[</span><span class="n">pm_count</span> <span class="o">&gt;=</span> <span class="n">min_references</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">)]</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">cell_id</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">pm_count</span><span class="p">[</span><span class="n">pm_count</span> <span class="o">&lt;</span> <span class="mi">500</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">)]</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;abstracts in corpus&#39;</span><span class="p">)</span>
-    <span class="n">pm_count</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;cell_id&#39;</span><span class="p">])[</span><span class="s1">&#39;cell_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Every cell line has at least&#39;</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">pm_count</span><span class="p">),</span> <span class="s1">&#39;documents&#39;</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">stemmed</span><span class="p">:</span>
-        <span class="n">stemmer</span> <span class="o">=</span> <span class="n">PorterStemmer</span><span class="p">()</span>
-        <span class="n">stemmed_corpus</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;document&#39;</span><span class="p">]:</span>
-            <span class="n">doc</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-            <span class="n">stemmed_corpus</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">stemmer</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">split</span><span class="p">()]))</span>
-        <span class="n">corpus</span> <span class="o">=</span> <span class="n">stemmed_corpus</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">corpus</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;document&#39;</span><span class="p">]</span>
-
-    <span class="n">vectorizer</span> <span class="o">=</span> <span class="n">TfidfVectorizer</span><span class="p">(</span><span class="n">sublinear_tf</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_df</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">min_df</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">strip_accents</span><span class="o">=</span><span class="s1">&#39;ascii&#39;</span><span class="p">,</span> <span class="n">stop_words</span><span class="o">=</span><span class="s1">&#39;english&#39;</span><span class="p">,</span>
-                                 <span class="n">token_pattern</span><span class="o">=</span><span class="sa">u</span><span class="s1">&#39;(?ui)</span><span class="se">\\</span><span class="s1">b</span><span class="se">\\</span><span class="s1">w*[a-z]+</span><span class="se">\\</span><span class="s1">w*</span><span class="se">\\</span><span class="s1">b&#39;</span><span class="p">)</span>
-    <span class="n">dtm</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;DTM shape:&#39;</span><span class="p">,</span> <span class="n">dtm</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-    <span class="n">wordfreq</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">get_feature_names</span><span class="p">(),</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">idf_</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Top 20 words&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">wordfreq</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])[:</span><span class="mi">20</span><span class="p">])</span>
-    <span class="n">reference_vocab</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">get_feature_names</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">reference_vocab</span><span class="p">),</span> <span class="s1">&#39;words&#39;</span><span class="p">)</span>
-
-    <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">dtm</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;cell_id&#39;</span><span class="p">]</span>
-    <span class="n">scoring</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;precision_micro&#39;</span><span class="p">,</span> <span class="s1">&#39;recall_micro&#39;</span><span class="p">]</span>
-    <span class="n">param_grid</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="s1">&#39;kernel&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="s1">&#39;rbf&#39;</span><span class="p">)}</span>
-    <span class="n">svc</span> <span class="o">=</span> <span class="n">SVC</span><span class="p">(</span><span class="n">decision_function_shape</span><span class="o">=</span><span class="s1">&#39;ovr&#39;</span><span class="p">)</span>
-    <span class="n">clf</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">svc</span><span class="p">,</span> <span class="n">param_grid</span><span class="o">=</span><span class="n">param_grid</span><span class="p">,</span> <span class="n">return_train_score</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
-                       <span class="n">scoring</span><span class="o">=</span><span class="n">scoring</span><span class="p">,</span> <span class="n">refit</span><span class="o">=</span><span class="s1">&#39;recall_micro&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">clf</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;cell_id&#39;</span><span class="p">])</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;clf&#39;</span><span class="p">:</span> <span class="n">clf</span><span class="p">,</span> <span class="s1">&#39;estimator&#39;</span><span class="p">:</span> <span class="n">clf</span><span class="o">.</span><span class="n">best_estimator_</span><span class="p">,</span> <span class="s1">&#39;pm_count&#39;</span><span class="p">:</span> <span class="n">pm_count</span><span class="p">}</span>
-
-
-<span class="n">results_min_ref</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">min_ref</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">]:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="o">*</span><span class="mi">80</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">min_ref</span><span class="p">,</span> <span class="s1">&#39;minimum references&#39;</span><span class="p">)</span>
-    <span class="n">results_min_ref</span><span class="p">[</span><span class="n">min_ref</span><span class="p">]</span> <span class="o">=</span> <span class="n">crossval</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">reference_df</span><span class="p">,</span> <span class="n">min_references</span><span class="o">=</span><span class="n">min_ref</span><span class="p">,</span> <span class="n">stemmed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
 
 <div class="output_wrapper">
 <div class="output">
 
-
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>________________________________________________________________________________
@@ -13885,9 +13528,6 @@ Fitting 10 folds for each of 4 candidates, totalling 40 fits
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 <div class="output_subarea output_stream output_stderr output_text">
 <pre>[Parallel(n_jobs=-1)]: Using backend LokyBackend with 96 concurrent workers.
 [Parallel(n_jobs=-1)]: Done  13 out of  40 | elapsed: 191.2min remaining: 397.0min
@@ -13897,9 +13537,6 @@ Fitting 10 folds for each of 4 candidates, totalling 40 fits
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>________________________________________________________________________________
@@ -13917,9 +13554,6 @@ Fitting 10 folds for each of 4 candidates, totalling 40 fits
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 <div class="output_subarea output_stream output_stderr output_text">
 <pre>[Parallel(n_jobs=-1)]: Using backend LokyBackend with 96 concurrent workers.
 [Parallel(n_jobs=-1)]: Done  13 out of  40 | elapsed: 73.5min remaining: 152.6min
@@ -13929,9 +13563,6 @@ Fitting 10 folds for each of 4 candidates, totalling 40 fits
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>________________________________________________________________________________
@@ -13948,9 +13579,6 @@ Fitting 10 folds for each of 4 candidates, totalling 40 fits
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 <div class="output_subarea output_stream output_stderr output_text">
 <pre>[Parallel(n_jobs=-1)]: Using backend LokyBackend with 96 concurrent workers.
@@ -13974,49 +13602,11 @@ This results show that the best estimator is <em>C:1-kernel:linear</em></p>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">clf_10</span> <span class="o">=</span> <span class="n">results_min_ref</span><span class="p">[</span><span class="mi">10</span><span class="p">][</span><span class="s1">&#39;clf&#39;</span><span class="p">]</span>
-<span class="n">clf_50</span> <span class="o">=</span> <span class="n">results_min_ref</span><span class="p">[</span><span class="mi">50</span><span class="p">][</span><span class="s1">&#39;clf&#39;</span><span class="p">]</span>
-<span class="n">clf_100</span> <span class="o">=</span> <span class="n">results_min_ref</span><span class="p">[</span><span class="mi">100</span><span class="p">][</span><span class="s1">&#39;clf&#39;</span><span class="p">]</span>
-
-<span class="n">min_refs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
-<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;C:1-kernel:linear&#39;</span><span class="p">,</span> <span class="s1">&#39;C:1-kernel:rbf&#39;</span><span class="p">,</span> <span class="s1">&#39;C:10-kernel:linear&#39;</span><span class="p">,</span> <span class="s1">&#39;C:10-kernel:rbf&#39;</span><span class="p">]</span>
-<span class="n">markers</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;^&#39;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">]</span>
-
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Micro-Averaged Precision&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Minimum number of documents&#39;</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">min_refs</span><span class="p">)</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">clf_10</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="s1">&#39;mean_test_precision_micro&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> <span class="n">clf_50</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="s1">&#39;mean_test_precision_micro&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> \
-        <span class="n">clf_100</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="s1">&#39;mean_test_precision_micro&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
-    <span class="n">e</span> <span class="o">=</span> <span class="n">clf_10</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="s1">&#39;std_test_precision_micro&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> <span class="n">clf_50</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="s1">&#39;std_test_precision_micro&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> \
-        <span class="n">clf_100</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="s1">&#39;std_test_precision_micro&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="n">markers</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">capsize</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;data/img/precision_.png&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
 
 <div class="output_wrapper">
 <div class="output">
 
-
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 
@@ -14042,98 +13632,11 @@ This results show that the best estimator is <em>C:1-kernel:linear</em>.</p>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">SVC</span>
-<span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">LinearSVC</span>
-<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">GridSearchCV</span>
-<span class="kn">from</span> <span class="nn">nltk.stem.porter</span> <span class="kn">import</span> <span class="n">PorterStemmer</span>
-<span class="kn">from</span> <span class="nn">sklearn.feature_selection</span> <span class="kn">import</span> <span class="n">SelectFromModel</span>
-<span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="kn">import</span> <span class="n">TfidfVectorizer</span>
-
-<span class="k">def</span> <span class="nf">crossval</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">min_references</span><span class="p">,</span> <span class="n">stemmed</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="n">pm_count</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;cell_id&#39;</span><span class="p">])[</span><span class="s1">&#39;cell_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">cell_id</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">pm_count</span><span class="p">[</span><span class="n">pm_count</span> <span class="o">&gt;=</span> <span class="n">min_references</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">)]</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">cell_id</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">pm_count</span><span class="p">[</span><span class="n">pm_count</span> <span class="o">&lt;</span> <span class="mi">500</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">)]</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;abstracts in corpus&#39;</span><span class="p">)</span>
-    <span class="n">pm_count</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;cell_id&#39;</span><span class="p">])[</span><span class="s1">&#39;cell_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Every cell line has at least&#39;</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">pm_count</span><span class="p">),</span> <span class="s1">&#39;documents&#39;</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">stemmed</span><span class="p">:</span>
-        <span class="n">stemmer</span> <span class="o">=</span> <span class="n">PorterStemmer</span><span class="p">()</span>
-        <span class="n">stemmed_corpus</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;document&#39;</span><span class="p">]:</span>
-            <span class="n">doc</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-            <span class="n">stemmed_corpus</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">stemmer</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">split</span><span class="p">()]))</span>
-        <span class="n">corpus</span> <span class="o">=</span> <span class="n">stemmed_corpus</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">corpus</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;document&#39;</span><span class="p">]</span>
-
-    <span class="n">vectorizer</span> <span class="o">=</span> <span class="n">TfidfVectorizer</span><span class="p">(</span><span class="n">sublinear_tf</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_df</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">min_df</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">strip_accents</span><span class="o">=</span><span class="s1">&#39;ascii&#39;</span><span class="p">,</span> <span class="n">stop_words</span><span class="o">=</span><span class="s1">&#39;english&#39;</span><span class="p">,</span>
-                                 <span class="n">token_pattern</span><span class="o">=</span><span class="sa">u</span><span class="s1">&#39;(?ui)</span><span class="se">\\</span><span class="s1">b</span><span class="se">\\</span><span class="s1">w*[a-z]+</span><span class="se">\\</span><span class="s1">w*</span><span class="se">\\</span><span class="s1">b&#39;</span><span class="p">)</span>
-    <span class="n">dtm</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;DTM shape:&#39;</span><span class="p">,</span> <span class="n">dtm</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-    <span class="n">wordfreq</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">get_feature_names</span><span class="p">(),</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">idf_</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Top 20 words&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">wordfreq</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])[:</span><span class="mi">20</span><span class="p">])</span>
-    <span class="n">reference_vocab</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">get_feature_names</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">reference_vocab</span><span class="p">),</span> <span class="s1">&#39;words&#39;</span><span class="p">)</span>
-
-    <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">dtm</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;cell_id&#39;</span><span class="p">]</span>
-    <span class="n">scoring</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;precision_micro&#39;</span><span class="p">,</span> <span class="s1">&#39;recall_micro&#39;</span><span class="p">]</span>
-    <span class="n">param_grid</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="s1">&#39;kernel&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="s1">&#39;rbf&#39;</span><span class="p">)}</span>
-    <span class="n">svc</span> <span class="o">=</span> <span class="n">SVC</span><span class="p">(</span><span class="n">decision_function_shape</span><span class="o">=</span><span class="s1">&#39;ovr&#39;</span><span class="p">)</span>
-    <span class="n">clf</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">svc</span><span class="p">,</span> <span class="n">param_grid</span><span class="o">=</span><span class="n">param_grid</span><span class="p">,</span> <span class="n">return_train_score</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
-                       <span class="n">scoring</span><span class="o">=</span><span class="n">scoring</span><span class="p">,</span> <span class="n">refit</span><span class="o">=</span><span class="s1">&#39;recall_micro&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">clf</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;cell_id&#39;</span><span class="p">])</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;clf&#39;</span><span class="p">:</span> <span class="n">clf</span><span class="p">,</span> <span class="s1">&#39;estimator&#39;</span><span class="p">:</span> <span class="n">clf</span><span class="o">.</span><span class="n">best_estimator_</span><span class="p">,</span> <span class="s1">&#39;pm_count&#39;</span><span class="p">:</span> <span class="n">pm_count</span><span class="p">}</span>
-
-
-<span class="n">results_min_ref</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">min_ref</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">]:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="o">*</span><span class="mi">80</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">min_ref</span><span class="p">,</span> <span class="s1">&#39;minimum references&#39;</span><span class="p">)</span>
-    <span class="n">results_min_ref</span><span class="p">[</span><span class="n">min_ref</span><span class="p">]</span> <span class="o">=</span> <span class="n">crossval</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">reference_df</span><span class="p">,</span> <span class="n">min_references</span><span class="o">=</span><span class="n">min_ref</span><span class="p">,</span> <span class="n">stemmed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="n">clf_10</span> <span class="o">=</span> <span class="n">results_min_ref</span><span class="p">[</span><span class="mi">10</span><span class="p">][</span><span class="s1">&#39;clf&#39;</span><span class="p">]</span>
-<span class="n">clf_50</span> <span class="o">=</span> <span class="n">results_min_ref</span><span class="p">[</span><span class="mi">50</span><span class="p">][</span><span class="s1">&#39;clf&#39;</span><span class="p">]</span>
-<span class="n">clf_100</span> <span class="o">=</span> <span class="n">results_min_ref</span><span class="p">[</span><span class="mi">100</span><span class="p">][</span><span class="s1">&#39;clf&#39;</span><span class="p">]</span>
-
-<span class="n">min_refs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
-<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;C:1-kernel:linear&#39;</span><span class="p">,</span> <span class="s1">&#39;C:1-kernel:rbf&#39;</span><span class="p">,</span> <span class="s1">&#39;C:10-kernel:linear&#39;</span><span class="p">,</span> <span class="s1">&#39;C:10-kernel:rbf&#39;</span><span class="p">]</span>
-<span class="n">markers</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;^&#39;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">]</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Micro-Averaged Precision&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Minimum number of documents&#39;</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">min_refs</span><span class="p">)</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">clf_10</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="s1">&#39;mean_test_precision_micro&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> <span class="n">clf_50</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="s1">&#39;mean_test_precision_micro&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> \
-        <span class="n">clf_100</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="s1">&#39;mean_test_precision_micro&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
-    <span class="n">e</span> <span class="o">=</span> <span class="n">clf_10</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="s1">&#39;std_test_precision_micro&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> <span class="n">clf_50</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="s1">&#39;std_test_precision_micro&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> \
-        <span class="n">clf_100</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="s1">&#39;std_test_precision_micro&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="n">markers</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">capsize</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;data/img/precision_stemmed.png&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
 
 <div class="output_wrapper">
 <div class="output">
 
-
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>________________________________________________________________________________
@@ -14151,9 +13654,6 @@ Fitting 10 folds for each of 4 candidates, totalling 40 fits
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 <div class="output_subarea output_stream output_stderr output_text">
 <pre>[Parallel(n_jobs=-1)]: Using backend LokyBackend with 96 concurrent workers.
 [Parallel(n_jobs=-1)]: Done  13 out of  40 | elapsed: 182.8min remaining: 379.6min
@@ -14163,9 +13663,6 @@ Fitting 10 folds for each of 4 candidates, totalling 40 fits
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>________________________________________________________________________________
@@ -14183,9 +13680,6 @@ Fitting 10 folds for each of 4 candidates, totalling 40 fits
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 <div class="output_subarea output_stream output_stderr output_text">
 <pre>[Parallel(n_jobs=-1)]: Using backend LokyBackend with 96 concurrent workers.
 [Parallel(n_jobs=-1)]: Done  13 out of  40 | elapsed: 75.9min remaining: 157.7min
@@ -14195,9 +13689,6 @@ Fitting 10 folds for each of 4 candidates, totalling 40 fits
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>________________________________________________________________________________
@@ -14215,9 +13706,6 @@ Fitting 10 folds for each of 4 candidates, totalling 40 fits
 
 <div class="output_area">
 
-    <div class="prompt"></div>
-
-
 <div class="output_subarea output_stream output_stderr output_text">
 <pre>[Parallel(n_jobs=-1)]: Using backend LokyBackend with 96 concurrent workers.
 [Parallel(n_jobs=-1)]: Done  13 out of  40 | elapsed: 35.0min remaining: 72.7min
@@ -14227,9 +13715,6 @@ Fitting 10 folds for each of 4 candidates, totalling 40 fits
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 <div class="output_subarea output_text output_error">
 <pre>
@@ -14251,41 +13736,11 @@ Fitting 10 folds for each of 4 candidates, totalling 40 fits
 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Micro-Averaged Precision&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Minimum number of documents&#39;</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">min_refs</span><span class="p">)</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">clf_10</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="s1">&#39;mean_test_precision_micro&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> <span class="n">clf_50</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="s1">&#39;mean_test_precision_micro&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> \
-        <span class="n">clf_100</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="s1">&#39;mean_test_precision_micro&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
-    <span class="n">e</span> <span class="o">=</span> <span class="n">clf_10</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="s1">&#39;std_test_precision_micro&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> <span class="n">clf_50</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="s1">&#39;std_test_precision_micro&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> \
-        <span class="n">clf_100</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="s1">&#39;std_test_precision_micro&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="n">markers</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">capsize</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;data/img/precision_stemmed.png&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
 
 <div class="output_wrapper">
 <div class="output">
 
-
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 
@@ -14311,74 +13766,11 @@ We plot micro-averaged precision for Non-Stemmed corpus.</p>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">cross_validate</span>
-
-<span class="k">def</span> <span class="nf">min_ref_pipeline</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">min_references</span><span class="p">,</span> <span class="n">stemmed</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="n">pm_count</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;cell_id&#39;</span><span class="p">])[</span><span class="s1">&#39;cell_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">cell_id</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">pm_count</span><span class="p">[</span><span class="n">pm_count</span> <span class="o">&gt;=</span> <span class="n">min_references</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">)]</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">cell_id</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">pm_count</span><span class="p">[</span><span class="n">pm_count</span> <span class="o">&lt;</span> <span class="mi">500</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">)]</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;abstracts in corpus&#39;</span><span class="p">)</span>
-    <span class="n">pm_count</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;cell_id&#39;</span><span class="p">])[</span><span class="s1">&#39;cell_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">pm_count</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;cell lines&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Every cell line has at least&#39;</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">pm_count</span><span class="p">),</span> <span class="s1">&#39;documents&#39;</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">stemmed</span><span class="p">:</span>
-        <span class="n">stemmer</span> <span class="o">=</span> <span class="n">PorterStemmer</span><span class="p">()</span>
-        <span class="n">stemmed_corpus</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;document&#39;</span><span class="p">]:</span>
-            <span class="n">doc</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-            <span class="n">stemmed_corpus</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">stemmer</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">split</span><span class="p">()]))</span>
-        <span class="n">corpus</span> <span class="o">=</span> <span class="n">stemmed_corpus</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">corpus</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;document&#39;</span><span class="p">]</span>
-
-    <span class="n">vectorizer</span> <span class="o">=</span> <span class="n">TfidfVectorizer</span><span class="p">(</span><span class="n">sublinear_tf</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_df</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">min_df</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">strip_accents</span><span class="o">=</span><span class="s1">&#39;ascii&#39;</span><span class="p">,</span> <span class="n">stop_words</span><span class="o">=</span><span class="s1">&#39;english&#39;</span><span class="p">,</span>
-                                 <span class="n">token_pattern</span><span class="o">=</span><span class="sa">u</span><span class="s1">&#39;(?ui)</span><span class="se">\\</span><span class="s1">b</span><span class="se">\\</span><span class="s1">w*[a-z]+</span><span class="se">\\</span><span class="s1">w*</span><span class="se">\\</span><span class="s1">b&#39;</span><span class="p">)</span>
-    <span class="n">dtm</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;DTM shape:&#39;</span><span class="p">,</span> <span class="n">dtm</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-    <span class="n">wordfreq</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">get_feature_names</span><span class="p">(),</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">idf_</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Top 20 words&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">wordfreq</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])[:</span><span class="mi">20</span><span class="p">])</span>
-    <span class="n">reference_vocab</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">get_feature_names</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">reference_vocab</span><span class="p">),</span> <span class="s1">&#39;words&#39;</span><span class="p">)</span>
-
-    <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">dtm</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;cell_id&#39;</span><span class="p">]</span>
-    <span class="n">clf</span> <span class="o">=</span> <span class="n">LinearSVC</span><span class="p">(</span><span class="n">penalty</span><span class="o">=</span><span class="s1">&#39;l2&#39;</span><span class="p">,</span> <span class="n">multi_class</span><span class="o">=</span><span class="s1">&#39;ovr&#39;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-    <span class="n">X_new</span> <span class="o">=</span> <span class="n">SelectFromModel</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">clf</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="s1">&#39;median&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">X_new</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-
-    <span class="n">clf</span> <span class="o">=</span> <span class="n">LinearSVC</span><span class="p">(</span><span class="n">penalty</span><span class="o">=</span><span class="s2">&quot;l2&quot;</span><span class="p">,</span> <span class="n">dual</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">multi_class</span><span class="o">=</span><span class="s1">&#39;ovr&#39;</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;=&#39;</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
-
-    <span class="n">scoring</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;precision_macro&#39;</span><span class="p">,</span> <span class="s1">&#39;precision_micro&#39;</span><span class="p">,</span> <span class="s1">&#39;recall_macro&#39;</span><span class="p">,</span> <span class="s1">&#39;recall_micro&#39;</span><span class="p">]</span>
-    <span class="n">results</span> <span class="o">=</span> <span class="n">cross_validate</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">clf</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="n">X_new</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                             <span class="n">return_estimator</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_train_score</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="n">scoring</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;cell_id&#39;</span><span class="p">])</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;clf&#39;</span><span class="p">:</span> <span class="n">clf</span><span class="p">,</span> <span class="s1">&#39;results&#39;</span><span class="p">:</span> <span class="n">results</span><span class="p">,</span> <span class="s1">&#39;pm_count&#39;</span><span class="p">:</span> <span class="n">pm_count</span><span class="p">}</span>
-
-
-<span class="k">for</span> <span class="n">min_ref</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">100</span><span class="p">]:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="o">*</span><span class="mi">80</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">min_ref</span><span class="p">,</span> <span class="s1">&#39;minimum references&#39;</span><span class="p">)</span>
-    <span class="n">results_min_ref</span><span class="p">[</span><span class="n">min_ref</span><span class="p">]</span> <span class="o">=</span> <span class="n">min_ref_pipeline</span><span class="p">(</span><span class="n">reference_df</span><span class="p">,</span> <span class="n">min_references</span><span class="o">=</span><span class="n">min_ref</span><span class="p">,</span> <span class="n">stemmed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
 
 <div class="output_wrapper">
 <div class="output">
 
-
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>________________________________________________________________________________
@@ -14914,57 +14306,11 @@ Top 20 words
 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[7]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-
-<span class="n">x</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">results_min_ref</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
-<span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">results_min_ref</span><span class="p">[</span><span class="n">min_ref</span><span class="p">][</span><span class="s1">&#39;pm_count&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">min_ref</span> <span class="ow">in</span> <span class="n">results_min_ref</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
-<span class="n">min_ref_pd</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Minimum number of documents&#39;</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="s1">&#39;Number of cell lines&#39;</span><span class="p">:</span> <span class="n">y</span><span class="p">})</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Number of cell lines&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Minimum number of documents&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;data/img/min_ref.png&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Averaged Micro Precision&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Minimum number of documents&#39;</span><span class="p">)</span>
-
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-
-<span class="n">x</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">results_min_ref</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
-<span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">results_min_ref</span><span class="p">[</span><span class="n">min_ref</span><span class="p">][</span><span class="s1">&#39;results&#39;</span><span class="p">][</span><span class="s1">&#39;train_precision_micro&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">min_ref</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
-<span class="n">e</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">results_min_ref</span><span class="p">[</span><span class="n">min_ref</span><span class="p">][</span><span class="s1">&#39;results&#39;</span><span class="p">][</span><span class="s1">&#39;train_precision_micro&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">min_ref</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="n">markers</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Train dataset&#39;</span><span class="p">,</span> <span class="n">capsize</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-
-<span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">results_min_ref</span><span class="p">[</span><span class="n">min_ref</span><span class="p">][</span><span class="s1">&#39;results&#39;</span><span class="p">][</span><span class="s1">&#39;test_precision_micro&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">min_ref</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
-<span class="n">e</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">results_min_ref</span><span class="p">[</span><span class="n">min_ref</span><span class="p">][</span><span class="s1">&#39;results&#39;</span><span class="p">][</span><span class="s1">&#39;test_precision_micro&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">min_ref</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="n">markers</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Test dataset&#39;</span><span class="p">,</span> <span class="n">capsize</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;data/img/precision_min_ref.png&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
 
 <div class="output_wrapper">
 <div class="output">
 
-
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 
@@ -14977,9 +14323,6 @@ Top 20 words
 </div>
 
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 
@@ -15005,78 +14348,11 @@ We plot micro-averaged precision for Non-Stemmed corpus.</p>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">LinearSVC</span>
-
-<span class="k">def</span> <span class="nf">min_threshold_pipeline</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">min_references</span><span class="p">,</span> <span class="n">stemmed</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="n">pm_count</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;cell_id&#39;</span><span class="p">])[</span><span class="s1">&#39;cell_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">cell_id</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">pm_count</span><span class="p">[</span><span class="n">pm_count</span> <span class="o">&gt;=</span> <span class="n">min_references</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">)]</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">cell_id</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">pm_count</span><span class="p">[</span><span class="n">pm_count</span> <span class="o">&lt;</span> <span class="mi">500</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">)]</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;abstracts in corpus&#39;</span><span class="p">)</span>
-    <span class="n">pm_count</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;cell_id&#39;</span><span class="p">])[</span><span class="s1">&#39;cell_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">pm_count</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;cell lines&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Every cell line has at least&#39;</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">pm_count</span><span class="p">),</span> <span class="s1">&#39;documents&#39;</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">stemmed</span><span class="p">:</span>
-        <span class="n">stemmer</span> <span class="o">=</span> <span class="n">PorterStemmer</span><span class="p">()</span>
-        <span class="n">stemmed_corpus</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;document&#39;</span><span class="p">]:</span>
-            <span class="n">doc</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-            <span class="n">stemmed_corpus</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">stemmer</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">split</span><span class="p">()]))</span>
-        <span class="n">corpus</span> <span class="o">=</span> <span class="n">stemmed_corpus</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">corpus</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;document&#39;</span><span class="p">]</span>
-
-    <span class="n">vectorizer</span> <span class="o">=</span> <span class="n">TfidfVectorizer</span><span class="p">(</span><span class="n">sublinear_tf</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_df</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">min_df</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">strip_accents</span><span class="o">=</span><span class="s1">&#39;ascii&#39;</span><span class="p">,</span> <span class="n">stop_words</span><span class="o">=</span><span class="s1">&#39;english&#39;</span><span class="p">,</span>
-                                 <span class="n">token_pattern</span><span class="o">=</span><span class="sa">u</span><span class="s1">&#39;(?ui)</span><span class="se">\\</span><span class="s1">b</span><span class="se">\\</span><span class="s1">w*[a-z]+</span><span class="se">\\</span><span class="s1">w*</span><span class="se">\\</span><span class="s1">b&#39;</span><span class="p">)</span>
-    <span class="n">dtm</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;DTM shape:&#39;</span><span class="p">,</span> <span class="n">dtm</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-    <span class="n">wordfreq</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">get_feature_names</span><span class="p">(),</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">idf_</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Top 20 words&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">wordfreq</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])[:</span><span class="mi">20</span><span class="p">])</span>
-    <span class="n">reference_vocab</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">get_feature_names</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">reference_vocab</span><span class="p">),</span> <span class="s1">&#39;words&#39;</span><span class="p">)</span>
-
-    <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">dtm</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;cell_id&#39;</span><span class="p">]</span>
-    <span class="n">clf</span> <span class="o">=</span> <span class="n">LinearSVC</span><span class="p">(</span><span class="n">penalty</span><span class="o">=</span><span class="s1">&#39;l2&#39;</span><span class="p">,</span> <span class="n">multi_class</span><span class="o">=</span><span class="s1">&#39;ovr&#39;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-    <span class="n">thresholds</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;0.5*median&#39;</span><span class="p">,</span> <span class="s1">&#39;median&#39;</span><span class="p">,</span> <span class="s1">&#39;1.5*median&#39;</span><span class="p">,</span> <span class="s1">&#39;2*median&#39;</span><span class="p">]</span>
-    <span class="n">results</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">threshold</span> <span class="ow">in</span> <span class="n">thresholds</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">threshold</span><span class="p">)</span>
-        <span class="n">X_new</span> <span class="o">=</span> <span class="n">SelectFromModel</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">clf</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">X_new</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-
-        <span class="n">clf</span> <span class="o">=</span> <span class="n">LinearSVC</span><span class="p">(</span><span class="n">penalty</span><span class="o">=</span><span class="s2">&quot;l2&quot;</span><span class="p">,</span> <span class="n">dual</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">multi_class</span><span class="o">=</span><span class="s1">&#39;ovr&#39;</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;=&#39;</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
-
-        <span class="n">scoring</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;precision_macro&#39;</span><span class="p">,</span> <span class="s1">&#39;precision_micro&#39;</span><span class="p">,</span> <span class="s1">&#39;recall_macro&#39;</span><span class="p">,</span> <span class="s1">&#39;recall_micro&#39;</span><span class="p">]</span>
-        <span class="n">results</span><span class="p">[</span><span class="n">threshold</span><span class="p">]</span> <span class="o">=</span> <span class="n">cross_validate</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">clf</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="n">X_new</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                                 <span class="n">return_estimator</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_train_score</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="n">scoring</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;cell_id&#39;</span><span class="p">])</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;results&#39;</span><span class="p">:</span> <span class="n">results</span><span class="p">}</span>
-
-
-<span class="n">results_min_ref_</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">min_ref</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">60</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">100</span><span class="p">]:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="o">*</span><span class="mi">80</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">min_ref</span><span class="p">,</span> <span class="s1">&#39;minimum references&#39;</span><span class="p">)</span>
-    <span class="n">results_min_ref_</span><span class="p">[</span><span class="n">min_ref</span><span class="p">]</span> <span class="o">=</span> <span class="n">min_threshold_pipeline</span><span class="p">(</span><span class="n">reference_df</span><span class="p">,</span> <span class="n">min_references</span><span class="o">=</span><span class="n">min_ref</span><span class="p">,</span> <span class="n">stemmed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
 
 <div class="output_wrapper">
 <div class="output">
 
-
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>________________________________________________________________________________
@@ -15193,49 +14469,11 @@ median
 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-    
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Averaged Micro Precision&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Minimum number of documents&#39;</span><span class="p">)</span>
-<span class="n">markers</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;^&#39;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">]</span>
-<span class="n">thresholds</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;0.5*median&#39;</span><span class="p">,</span> <span class="s1">&#39;median&#39;</span><span class="p">,</span> <span class="s1">&#39;1.5*median&#39;</span><span class="p">,</span> <span class="s1">&#39;2*median&#39;</span><span class="p">]</span>
-<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39; (threshold = 0.5*median)&#39;</span><span class="p">,</span> <span class="s1">&#39; (threshold = median)&#39;</span><span class="p">,</span> <span class="s1">&#39; (threshold = 1.5*median)&#39;</span><span class="p">,</span> <span class="s1">&#39; (threshold = 2*median)&#39;</span><span class="p">]</span>
-
-<span class="n">x</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">results_min_ref_</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">results_min_ref_</span><span class="p">[</span><span class="n">min_ref</span><span class="p">][</span><span class="s1">&#39;results&#39;</span><span class="p">][</span><span class="n">thresholds</span><span class="p">[</span><span class="n">i</span><span class="p">]][</span><span class="s1">&#39;train_precision_micro&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">min_ref</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
-    <span class="n">e</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">results_min_ref_</span><span class="p">[</span><span class="n">min_ref</span><span class="p">][</span><span class="s1">&#39;results&#39;</span><span class="p">][</span><span class="n">thresholds</span><span class="p">[</span><span class="n">i</span><span class="p">]][</span><span class="s1">&#39;train_precision_micro&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">min_ref</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;^&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Train dataset&#39;</span><span class="o">+</span><span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">capsize</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-
-    <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">results_min_ref_</span><span class="p">[</span><span class="n">min_ref</span><span class="p">][</span><span class="s1">&#39;results&#39;</span><span class="p">][</span><span class="n">thresholds</span><span class="p">[</span><span class="n">i</span><span class="p">]][</span><span class="s1">&#39;test_precision_micro&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">min_ref</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
-    <span class="n">e</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">results_min_ref_</span><span class="p">[</span><span class="n">min_ref</span><span class="p">][</span><span class="s1">&#39;results&#39;</span><span class="p">][</span><span class="n">thresholds</span><span class="p">[</span><span class="n">i</span><span class="p">]][</span><span class="s1">&#39;test_precision_micro&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">min_ref</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Test dataset&#39;</span><span class="o">+</span><span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">capsize</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;lower left&#39;</span><span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;data/img/precision_min_ref_threshold.png&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
 
 <div class="output_wrapper">
 <div class="output">
 
-
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 
 
@@ -15260,29 +14498,11 @@ median
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[27]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">clf</span> <span class="o">=</span> <span class="n">results_min_ref_</span><span class="p">[</span><span class="mi">60</span><span class="p">][</span><span class="s1">&#39;results&#39;</span><span class="p">][</span><span class="s1">&#39;0.5*median&#39;</span><span class="p">][</span><span class="s1">&#39;estimator&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">densify</span><span class="p">()</span>
-<span class="n">coef</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">coef_</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Coefficient matrix of shape:&#39;</span><span class="p">,</span><span class="n">coef</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Coefficient matrix sample:&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">coef</span><span class="p">[:</span><span class="mi">10</span><span class="p">,:</span><span class="mi">10</span><span class="p">])</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
 
 <div class="output_wrapper">
 <div class="output">
 
-
 <div class="output_area">
-
-    <div class="prompt"></div>
-
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Coefficient matrix of shape: (225, 37736)
@@ -15326,16 +14546,6 @@ Coefficient matrix sample:
 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span> 
-</pre></div>
-
-    </div>
-</div>
-</div>
 
 </div>
     </div>
