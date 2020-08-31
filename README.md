@@ -1,4 +1,4 @@
-# CellChar: A SVM-based characterization method for cellular lines using text processing
+# A Representation Method for Cellular Lines based on SVM and Text Mining
 
 ## Iván Carrera, Ines Dutra, and Eduardo Tejera
 ### Departamento de Informática y Ciencias de la Computación, Escuela Politécnica Nacional. Quito, Ecuador.
@@ -8,9 +8,7 @@
 ### Programa de Doutoramento em Ciência de Computadores FCUP.
 
 #### Abstract.
-Cellular lines are an important tool for research in drug discovery. Computational prediction of cell line interactions with candidate drug chemical compounds is a fundamental step to improve and optimize _in vitro_ assays in the drug discovery processes.
-One of the main problems of in silico prediction of cell line interactions with chemical compounds is the computational representation of cellular lines. Methods for QSAR modeling of cell line interactions compare genetic expression profiles. However, gene expression of cell lines is usually unknown. CellChar is a SVM-based characterization method for cellular lines. We obtain a representation for cell lines from text mining the scientific literature.
-We use two main knowledge sources: Cellosaurus, a knowledge resource on cell lines, and PubMed, a database of the NIH biomedical literature. We retrieve and analyze the scientific literature, then classify the scientific papers according to the cell lines they relate to, and afterwards, obtain a description of the cell line.
-We have been able to successfully characterize a set of cellular lines. We evaluate several configurations of linear Support Vector Classifiers, using micro-averaged precision as metric to choose the best classifier. Data and software are available for experimental reproducibility.
+One major problem in Bioinformatics is the discovery of new cell line interactions with chemical compounds. Computational methods for cell-line screening are fundamental to optimize cost and time of the drug discovery processes. However, in order to build these methods, we need a representation for cell lines. Current methods for modeling cell line interactions rely on comparing genetic expression profiles, but these are usually unknown.
+In this work we propose a method to characterize and represent cell lines by text mining the scientific literature. We collect abstracts of scientific papers about cellular lines from Cellosaurus and PubMed. These documents are then represented as TF-IDF vectors. We build a data set for classification with the document vectors having the cell line identifier as the target class. We then apply a multi-class SVM classification method. Each hyperplane obtained with a one-versus-all (OVA) training is used as the characterization of each cell line. We evaluated several configurations of classifiers, using micro-averaged precision as metric to choose the best classifier, and were able to characterize a set of 300+ cellular lines.
 
-#### Keywords: Knowledge representation · Document classification · Machine Learning · Bioinformatics · Drug Discovery
+#### Keywords: Machine Learning · Bioinformatics · Text mining
